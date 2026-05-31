@@ -4,7 +4,6 @@ import json
 
 ARQUIVO_JSON = "agendamentos.json"
 
-
 def carregar_agendamentos():
     """Carrega os agendamentos do arquivo JSON. Se não existir, retorna lista vazia."""
     if os.path.exists(ARQUIVO_JSON):
@@ -18,12 +17,10 @@ def carregar_agendamentos():
                 return []
     return []
 
-
 def salvar_agendamentos(agendamentos):
     """Salva a lista de agendamentos no arquivo JSON."""
     with open(ARQUIVO_JSON, "w", encoding="utf-8") as f:
         json.dump(agendamentos, f, ensure_ascii=False, indent=4)
-
 
 def exibir_menu():
     """Exibe o menu principal com as opções disponíveis."""
@@ -38,20 +35,17 @@ def exibir_menu():
     return input("
 Escolha uma opção (1-6): ").strip()
 
-
 def validar_data(data_str):
     """Valida se a string representa uma data válida no formato DD/MM/AAAA."""
     try:
         data = datetime.strptime(data_str, "%d/%m/%Y")
-        hoje = datetime.now().date()
-        if data.date() < hoje:
+        if data.date() < datetime.now().date():
             print("Erro: Não é possível agendar em datas passadas.")
             return False
         return True
     except ValueError:
         print("Erro: Formato de data inválido. Use DD/MM/AAAA (ex: 31/12/2023).")
         return False
-
 
 def validar_hora(hora_str):
     """Valida se a string representa uma hora válida no formato HH:MM."""
@@ -62,7 +56,6 @@ def validar_hora(hora_str):
         print("Erro: Formato de hora inválido. Use HH:MM (ex: 14:30).")
         return False
 
-
 def obter_servicos():
     """Retorna dicionário com serviços, preços e durações."""
     return {
@@ -70,16 +63,6 @@ def obter_servicos():
         "2": ("Barba", 20.0, 20),
         "3": ("Corte + Barba", 45.0, 50),
     }
-
-
-def obter_duracao_servico(nome_servico):
-    """Retorna a duração em minutos de um serviço pelo nome."""
-    servicos = obter_servicos()
-    for _, (nome, _, duracao) in servicos.items():
-        if nome == nome_servico:
-            return timedelta(minutes=duracao)
-    return timedelta(minutes=30)
-
 
 def horario_disponivel(agendamentos, data, hora, duracao):
     """Verifica se o horário está disponível considerando a duração do serviço."""
@@ -102,7 +85,6 @@ def horario_disponivel(agendamentos, data, hora, duracao):
         print(f"Erro ao verificar disponibilidade: {e}")
         return False
 
-
 def novo_agendamento(agendamentos):
     """Realiza um novo agendamento com validações."""
     print("
@@ -117,8 +99,8 @@ def novo_agendamento(agendamentos):
     servicos = obter_servicos()
     print("
 Serviços disponíveis:")
-    for key, (nome, preco, duracao) in servicos.items():
-        print(f"{key}. {nome} (R$ {preco:.2f}, {duracao}min)")
+    for key, (nome_servico, preco, duracao) in servicos.items():
+        print(f"{key}. {nome_servico} (R$ {preco:.2f}, {duracao}min)")
 
     while True:
         escolha = input("
@@ -137,7 +119,6 @@ Escolha o serviço (1-3): ").strip()
         hora = input("Hora (HH:MM): ").strip()
         if not validar_hora(hora):
             continue
-
         try:
             hora_check = datetime.strptime(f"{data} {hora}", "%d/%m/%Y %H:%M")
             if hora_check < datetime.now():
@@ -146,7 +127,6 @@ Escolha o serviço (1-3): ").strip()
         except Exception:
             print("Erro ao validar horário.")
             continue
-
         break
 
     if not horario_disponivel(agendamentos, data, hora, timedelta(minutes=duracao_servico)):
@@ -171,7 +151,6 @@ Erro: Horário não disponível. Já existe um agendamento neste período.")
     print("
 Agendamento realizado com sucesso!")
 
-
 def visualizar_todos(agendamentos):
     """Exibe todos os agendamentos ordenados por data e hora."""
     if not agendamentos:
@@ -193,7 +172,6 @@ Nenhum agendamento encontrado.")
 
     print("-" * 70)
     print(f"Total de agendamentos: {len(agendamentos_ordenados)} | Receita total: R$ {total_receita:.2f}")
-
 
 def cancelar_agendamento(agendamentos):
     """Cancela um agendamento pelo ID."""
@@ -235,7 +213,6 @@ Digite o ID do agendamento para cancelar (0 para voltar): "))
 Operação cancelada.")
             return
 
-
 def buscar_por_cliente(agendamentos):
     """Busca agendamentos por nome do cliente."""
     if not agendamentos:
@@ -268,7 +245,6 @@ Digite o nome do cliente para buscar: ").strip().lower()
         print(f"
 Nenhum agendamento encontrado para o cliente '{nome_busca}'.")
 
-
 def mostrar_agenda_do_dia(agendamentos):
     """Mostra todos os agendamentos do dia atual."""
     hoje = datetime.now().strftime("%d/%m/%Y")
@@ -292,7 +268,6 @@ def mostrar_agenda_do_dia(agendamentos):
     else:
         print(f"
 Nenhum agendamento para hoje ({hoje}).")
-
 
 def main():
     """Função principal que executa o loop do sistema."""
@@ -330,7 +305,6 @@ Programa interrompido pelo usuário. Até logo!")
 Erro inesperado: {e}")
             print("O programa será encerrado.")
             break
-
 
 if __name__ == "__main__":
     main()
