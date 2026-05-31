@@ -24,16 +24,14 @@ def salvar_agendamentos(agendamentos):
 
 def exibir_menu():
     """Exibe o menu principal com as opções disponíveis."""
-    print("
-=== SISTEMA DE AGENDAMENTO DE BARBEARIA ===")
+    print("=== SISTEMA DE AGENDAMENTO DE BARBEARIA ===")
     print("1. Ver todos os agendamentos")
     print("2. Novo agendamento")
     print("3. Cancelar agendamento")
     print("4. Buscar agendamentos por cliente")
     print("5. Mostrar agenda do dia")
     print("6. Sair")
-    return input("
-Escolha uma opção (1-6): ").strip()
+    return input("Escolha uma opção (1-6): ").strip()
 
 def validar_data(data_str):
     """Valida se a string representa uma data válida no formato DD/MM/AAAA."""
@@ -87,8 +85,7 @@ def horario_disponivel(agendamentos, data, hora, duracao):
 
 def novo_agendamento(agendamentos):
     """Realiza um novo agendamento com validações."""
-    print("
---- NOVO AGENDAMENTO ---")
+    print("--- NOVO AGENDAMENTO ---")
 
     while True:
         nome = input("Nome do cliente: ").strip()
@@ -97,14 +94,12 @@ def novo_agendamento(agendamentos):
         print("O nome do cliente não pode estar vazio.")
 
     servicos = obter_servicos()
-    print("
-Serviços disponíveis:")
+    print("Serviços disponíveis:")
     for key, (nome_servico, preco, duracao) in servicos.items():
         print(f"{key}. {nome_servico} (R$ {preco:.2f}, {duracao}min)")
 
     while True:
-        escolha = input("
-Escolha o serviço (1-3): ").strip()
+        escolha = input("Escolha o serviço (1-3): ").strip()
         if escolha in servicos:
             nome_servico, preco_servico, duracao_servico = servicos[escolha]
             break
@@ -130,8 +125,7 @@ Escolha o serviço (1-3): ").strip()
         break
 
     if not horario_disponivel(agendamentos, data, hora, timedelta(minutes=duracao_servico)):
-        print("
-Erro: Horário não disponível. Já existe um agendamento neste período.")
+        print("Erro: Horário não disponível. Já existe um agendamento neste período.")
         return
 
     novo_id = max([ag["id"] for ag in agendamentos], default=0) + 1
@@ -148,20 +142,17 @@ Erro: Horário não disponível. Já existe um agendamento neste período.")
 
     agendamentos.append(novo)
     salvar_agendamentos(agendamentos)
-    print("
-Agendamento realizado com sucesso!")
+    print("Agendamento realizado com sucesso!")
 
 def visualizar_todos(agendamentos):
     """Exibe todos os agendamentos ordenados por data e hora."""
     if not agendamentos:
-        print("
-Nenhum agendamento encontrado.")
+        print("Nenhum agendamento encontrado.")
         return
 
     agendamentos_ordenados = sorted(agendamentos, key=lambda x: (x["data"], x["hora"]))
 
-    print("
---- TODOS OS AGENDAMENTOS ---")
+    print("--- TODOS OS AGENDAMENTOS ---")
     print(f"{'ID':<4} {'Cliente':<20} {'Serviço':<15} {'Data':<12} {'Hora':<8} {'Preço':<8}")
     print("-" * 70)
 
@@ -176,16 +167,14 @@ Nenhum agendamento encontrado.")
 def cancelar_agendamento(agendamentos):
     """Cancela um agendamento pelo ID."""
     if not agendamentos:
-        print("
-Nenhum agendamento para cancelar.")
+        print("Nenhum agendamento para cancelar.")
         return
 
     visualizar_todos(agendamentos)
 
     while True:
         try:
-            id_cancelar = int(input("
-Digite o ID do agendamento para cancelar (0 para voltar): "))
+            id_cancelar = int(input("Digite o ID do agendamento para cancelar (0 para voltar): "))
             if id_cancelar == 0:
                 return
 
@@ -209,19 +198,16 @@ Digite o ID do agendamento para cancelar (0 para voltar): "))
         except ValueError:
             print("Por favor, digite um número válido.")
         except KeyboardInterrupt:
-            print("
-Operação cancelada.")
+            print("Operação cancelada.")
             return
 
 def buscar_por_cliente(agendamentos):
     """Busca agendamentos por nome do cliente."""
     if not agendamentos:
-        print("
-Nenhum agendamento encontrado.")
+        print("Nenhum agendamento encontrado.")
         return
 
-    nome_busca = input("
-Digite o nome do cliente para buscar: ").strip().lower()
+    nome_busca = input("Digite o nome do cliente para buscar: ").strip().lower()
     if not nome_busca:
         print("Nome não pode estar vazio.")
         return
@@ -229,8 +215,7 @@ Digite o nome do cliente para buscar: ").strip().lower()
     resultados = [ag for ag in agendamentos if nome_busca in ag["nome_cliente"].lower()]
 
     if resultados:
-        print(f"
---- RESULTADOS PARA '{nome_busca.upper()}' ---")
+        print(f"--- RESULTADOS PARA '{nome_busca.upper()}' ---")
         print(f"{'ID':<4} {'Cliente':<20} {'Serviço':<15} {'Data':<12} {'Hora':<8} {'Preço':<8}")
         print("-" * 70)
 
@@ -242,8 +227,7 @@ Digite o nome do cliente para buscar: ").strip().lower()
         print("-" * 70)
         print(f"Total encontrado: {len(resultados)} agendamento(s) | Receita: R$ {total_receita:.2f}")
     else:
-        print(f"
-Nenhum agendamento encontrado para o cliente '{nome_busca}'.")
+        print(f"Nenhum agendamento encontrado para o cliente '{nome_busca}'.")
 
 def mostrar_agenda_do_dia(agendamentos):
     """Mostra todos os agendamentos do dia atual."""
@@ -253,8 +237,7 @@ def mostrar_agenda_do_dia(agendamentos):
     if agendamentos_hoje:
         agendamentos_ordenados = sorted(agendamentos_hoje, key=lambda x: x["hora"])
 
-        print(f"
---- AGENDA DE HOJE ({hoje}) ---")
+        print(f"--- AGENDA DE HOJE ({hoje}) ---")
         print(f"{'ID':<4} {'Cliente':<20} {'Serviço':<15} {'Hora':<8} {'Preço':<8}")
         print("-" * 60)
 
@@ -266,8 +249,7 @@ def mostrar_agenda_do_dia(agendamentos):
         print("-" * 60)
         print(f"Total para hoje: {len(agendamentos_ordenados)} agendamento(s) | Receita: R$ {total_receita:.2f}")
     else:
-        print(f"
-Nenhum agendamento para hoje ({hoje}).")
+        print(f"Nenhum agendamento para hoje ({hoje}).")
 
 def main():
     """Função principal que executa o loop do sistema."""
@@ -289,20 +271,15 @@ def main():
             elif opcao == "5":
                 mostrar_agenda_do_dia(agendamentos)
             elif opcao == "6":
-                print("
-Obrigado por usar o sistema! Até logo.")
+                print("Obrigado por usar o sistema! Até logo.")
                 break
             else:
-                print("
-Opção inválida. Escolha entre 1 e 6.")
+                print("Opção inválida. Escolha entre 1 e 6.")
         except KeyboardInterrupt:
-            print("
-
-Programa interrompido pelo usuário. Até logo!")
+            print("Programa interrompido pelo usuário. Até logo!")
             break
         except Exception as e:
-            print(f"
-Erro inesperado: {e}")
+            print(f"Erro inesperado: {e}")
             print("O programa será encerrado.")
             break
 
