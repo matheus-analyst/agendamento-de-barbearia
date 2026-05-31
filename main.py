@@ -4,6 +4,9 @@ import json
 
 ARQUIVO_JSON = "agendamentos.json"
 
+
+def limpar():
+   os. system("clear")
 def carregar_agendamentos():
     """Carrega os agendamentos do arquivo JSON. Se não existir, retorna lista vazia."""
     if os.path.exists(ARQUIVO_JSON):
@@ -142,6 +145,7 @@ def novo_agendamento(agendamentos):
 
     agendamentos.append(novo)
     salvar_agendamentos(agendamentos)
+    limpar()
     print("Agendamento realizado com sucesso!")
 
 def visualizar_todos(agendamentos):
@@ -261,23 +265,36 @@ def main():
             opcao = exibir_menu()
 
             if opcao == "1":
+                limpar()
                 visualizar_todos(agendamentos)
+                
             elif opcao == "2":
+                limpar()
                 novo_agendamento(agendamentos)
+                
             elif opcao == "3":
+                limpar()
                 cancelar_agendamento(agendamentos)
+                
             elif opcao == "4":
+                limpar()
                 buscar_por_cliente(agendamentos)
+                
             elif opcao == "5":
+                limpar()
                 mostrar_agenda_do_dia(agendamentos)
+                
             elif opcao == "6":
+                limpar()
                 print("Obrigado por usar o sistema! Até logo.")
                 break
+                
             else:
                 print("Opção inválida. Escolha entre 1 e 6.")
         except KeyboardInterrupt:
             print("Programa interrompido pelo usuário. Até logo!")
             break
+            
         except Exception as e:
             print(f"Erro inesperado: {e}")
             print("O programa será encerrado.")
